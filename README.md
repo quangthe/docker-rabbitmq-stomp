@@ -1,5 +1,10 @@
 # RabbitMQ docker image with STOMP plugin enable
 
+[![ci](https://github.com/quangthe/docker-rabbitmq-stomp/actions/workflows/docker-publish.yml/badge.svg)](https://github.com/quangthe/docker-rabbitmq-stomp/actions/workflows/docker-publish.yml)
+[![Docker Stars](https://img.shields.io/docker/stars/pcloud/rabbitmq-stomp.svg?style=flat)](https://hub.docker.com/r/pcloud/rabbitmq-stomp/)
+[![Docker Pulls](https://img.shields.io/docker/pulls/pcloud/rabbitmq-stomp.svg?style=flat)](https://hub.docker.com/r/pcloud/rabbitmq-stomp/)
+
+
 ## Quick start
 ```
 docker pull pcloud/rabbitmq-stomp
