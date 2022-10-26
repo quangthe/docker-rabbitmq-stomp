@@ -4,6 +4,7 @@
 [![Docker Stars](https://img.shields.io/docker/stars/pcloud/rabbitmq-stomp.svg?style=flat)](https://hub.docker.com/r/pcloud/rabbitmq-stomp/)
 [![Docker Pulls](https://img.shields.io/docker/pulls/pcloud/rabbitmq-stomp.svg?style=flat)](https://hub.docker.com/r/pcloud/rabbitmq-stomp/)
 
+Check image tags on [DockerHub](https://hub.docker.com/repository/docker/pcloud/rabbitmq-stomp/tags)
 
 ## Quick start
 ```
