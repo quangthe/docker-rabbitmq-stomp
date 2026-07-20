@@ -20,7 +20,7 @@
     }
   ],
   "schedule": [
-    "every monday at 6am"
+    "on monday before 6am"
   ],
   "automerge": false,
   "minimumReleaseAge": "3 days",
