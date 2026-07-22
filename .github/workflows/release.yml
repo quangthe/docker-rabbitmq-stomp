@@ -31,7 +31,10 @@ jobs:
       - name: Check if release already exists
         id: check
         env:
-          GH_TOKEN: ${{ github.token }}
+          # Must use a PAT, not GITHUB_TOKEN: releases created with the default
+          # token don't trigger other workflows (e.g. docker-publish.yml's
+          # `release` event), by GitHub design to avoid recursive runs.
+          GH_TOKEN: ${{ secrets.RELEASE_TOKEN }}
         run: |
           if gh release view "${{ steps.version.outputs.version }}" --repo "${{ github.repository }}" >/dev/null 2>&1; then
             echo "exists=true" >> "$GITHUB_OUTPUT"
@@ -42,7 +45,7 @@ jobs:
       - name: Create tag and release
         if: steps.check.outputs.exists == 'false'
         env:
-          GH_TOKEN: ${{ github.token }}
+          GH_TOKEN: ${{ secrets.RELEASE_TOKEN }}
         run: |
           gh release create "${{ steps.version.outputs.version }}" \
             --repo "${{ github.repository }}" \
