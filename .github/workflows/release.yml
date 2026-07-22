@@ -1,0 +1,55 @@
+name: Release
+
+on:
+  workflow_dispatch:
+    inputs:
+      note:
+        description: 'Notes'
+        required: false
+        default: 'Manual trigger'
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v7
+
+      - name: Extract RabbitMQ version from Dockerfile
+        id: version
+        run: |
+          version=$(grep -oP '(?<=^FROM rabbitmq:)[0-9]+\.[0-9]+\.[0-9]+' Dockerfile)
+          if [ -z "$version" ]; then
+            echo "Could not extract version from Dockerfile" >&2
+            exit 1
+          fi
+          echo "version=$version" >> "$GITHUB_OUTPUT"
+
+      - name: Check if release already exists
+        id: check
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          if gh release view "${{ steps.version.outputs.version }}" --repo "${{ github.repository }}" >/dev/null 2>&1; then
+            echo "exists=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "exists=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Create tag and release
+        if: steps.check.outputs.exists == 'false'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release create "${{ steps.version.outputs.version }}" \
+            --repo "${{ github.repository }}" \
+            --title "rabbitmq ${{ steps.version.outputs.version }}" \
+            --target "${{ github.sha }}" \
+            --generate-notes
+
+      - name: Skip - release already exists
+        if: steps.check.outputs.exists == 'true'
+        run: echo "Release ${{ steps.version.outputs.version }} already exists, skipping."
